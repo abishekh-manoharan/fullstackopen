@@ -26,11 +26,6 @@ const App = (props) => {
     notes.filter(note => note.important):
     notes
 
-  
-  const handleFilterClick = () => {
-    setFilter(!filter)
-  }
-
   return (
     <div>
       <h1>Notes</h1>
