@@ -22,9 +22,10 @@ const App = (props) => {
     setNewNote(e.target.value)
   }
 
-  const filtered = notes.filter(note => 
-    note.important === true
-  )  
+  const notesToShow = filter ?  
+    notes.filter(note => note.important):
+    notes
+
   
   const handleFilterClick = () => {
     setFilter(!filter)
@@ -35,16 +36,12 @@ const App = (props) => {
       <h1>Notes</h1>
       <form onSubmit={handleNewNoteSubmit}>
         <input onChange={handleNoteChange} name="note"/>
-        <input type='button' onClick={handleFilterClick} value="filter"/>
+        <input type='button' onClick={()=>{setFilter(!filter)}} value={filter}/>
         <button type='submit'>Submit</button>  
       </form>
       <ul>
-        
-        {filter ? 
-          notes.map(note => 
-            <Note key={note.id} note={note} />
-          ):
-          filtered.map(note => 
+        {
+          notesToShow.map(note => 
             <Note key={note.id} note={note} />
           )
         }
