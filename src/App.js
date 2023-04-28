@@ -1,31 +1,40 @@
-import Note from './components/Note'
 import { useState } from 'react'
-import Course from './components/Course'
+import Note from './components/Note'
 
-const App = () => {
-  const course = {
-    id: 1,
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 9,
-        id: 1
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
-      }
-    ]
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState("")
+
+  const handleNewNoteSubmit = (e) => {
+    e.preventDefault()
+    const aNote = {
+      id: notes[notes.length-1].id+1,
+      content: newNote,
+      important: Math.random() < .50,
+    }
+    setNotes(notes.concat(aNote))
+    
   }
 
-  return <Course course={course} />
+  const handleNoteChange = (e) => {
+    console.log(e.target.value)
+    setNewNote(e.target.value)
+  }
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <form onSubmit={handleNewNoteSubmit}>
+        <input onChange={handleNoteChange} name="note"/>
+        <button type='submit'>Submit</button>  
+      </form>
+      <ul>
+        {notes.map(note => 
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+    </div>
+  )
 }
 
-export default App
+export default App 
