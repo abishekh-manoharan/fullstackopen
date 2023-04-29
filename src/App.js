@@ -11,12 +11,16 @@ const App = () => {
   }
 
   const handleNewNameAdd = (e) => {
-    console.log('====================================');
-    console.log('click');
-    console.log('====================================');
     e.preventDefault();
-    setPersons(persons.concat({name: newName}))
+    const a = persons.find((e)=>{
+      return e.name === newName
+    })
+
+    if(a) alert(`person with name ${newName} already exists`)
+    else setPersons(persons.concat({name: newName}))
   }
+
+
 
   return (
     <div>
