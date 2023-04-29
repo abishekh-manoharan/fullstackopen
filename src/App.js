@@ -1,31 +1,42 @@
-import Note from './components/Note'
 import { useState } from 'react'
-import Course from './components/Course'
 
 const App = () => {
-  const course = {
-    id: 1,
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 9,
-        id: 1
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
-      }
-    ]
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas' }
+  ]) 
+  const [newName, setNewName] = useState('')
+
+  const handleNameChange = (e) => {
+    setNewName(e.target.value)
   }
 
-  return <Course course={course} />
+  const handleNewNameAdd = (e) => {
+    console.log('====================================');
+    console.log('click');
+    console.log('====================================');
+    e.preventDefault();
+    setPersons(persons.concat({name: newName}))
+  }
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={handleNewNameAdd}>
+        <div>
+          name: <input onChange={handleNameChange} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      {
+        persons.map((e)=><div key={e.name}>{e.name}</div>)
+      }
+      <div>debug: {newName}</div>
+    </div>
+
+  )
 }
 
 export default App
