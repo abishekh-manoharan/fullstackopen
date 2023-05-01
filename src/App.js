@@ -22,7 +22,7 @@ const App = () => {
     const filteredValue = e.target.value;
     if(filteredValue!==''){
       const filtered = persons.filter((el)=> {
-        return el.name.includes(e.target.value)
+        return el.name.toLowerCase().includes(e.target.value.toLowerCase())
       })
       setFilteredPersons(filtered)
     }
