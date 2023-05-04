@@ -17,6 +17,10 @@ const App = (props) => {
       })
   }, [])
 
+  useEffect(()=>{
+    console.log('notes changed')
+  }, [notes])
+
   const handleNewNoteSubmit = (e) => {
     e.preventDefault()
     const aNote = {
