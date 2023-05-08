@@ -5,7 +5,7 @@ import axios from 'axios'
 const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("")
-  const [filter, setFilter] = useState(true)
+  const [filter, setFilter] = useState(false)
 
   useEffect(() => {
     console.log('effect')
@@ -24,12 +24,34 @@ const App = (props) => {
   const handleNewNoteSubmit = (e) => {
     e.preventDefault()
     const aNote = {
-      id: notes[notes.length-1].id+1,
+      //id: notes[notes.length-1].id+1,
       content: newNote,
       important: Math.random() < 0.5,
     }
-    setNotes(notes.concat(aNote))
 
+    axios
+      .post('http://localhost:3001/notes', aNote)
+      .then((res)=>{
+        console.log(res);
+        setNotes(notes.concat(aNote))
+        setNewNote('')
+      })
+
+  }
+
+  const toggleImportanceOf = (id) => {
+    console.log(`importance of ${id} needs to be toggled`);
+
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find((e)=>e.id===id)
+    const updatedNote = {...note, important:!note.important}
+
+    axios 
+      .put(url, updatedNote)
+      .then((res)=>{
+        setNotes(notes.map((n)=>n.id === id ? updatedNote : n))
+        console.log(res);
+      })
   }
 
   const handleNoteChange = (e) => {
@@ -52,7 +74,7 @@ const App = (props) => {
       <ul>
         {
           notesToShow.map(note => 
-            <Note key={note.id} note={note} />
+            <Note key={note.id} note={note} toggleImportance={()=>{toggleImportanceOf(note.id)}}/>
           )
         }
       </ul>
