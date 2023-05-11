@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import FormAddPeople from './components/FormAddPeople'
 import NumbersList from './components/NumbersList'
+import phoneNumberService from './services/phoneNumber'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -44,7 +45,9 @@ const App = () => {
 
     if(a) alert(`person with name ${newName} already exists`)
     else {
-      setPersons(persons.concat({name: newName, number: newNumber}))
+      const phoneNumber = {name: newName, number: newNumber}
+      const promise = phoneNumberService.addNumber(phoneNumber)
+      promise.then(e=>setPersons(persons.concat(e)))
     }
   }
 
