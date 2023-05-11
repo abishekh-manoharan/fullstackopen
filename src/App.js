@@ -12,18 +12,28 @@ const App = () => {
   const [newNumber, setNewNumber] = useState()
 
   useEffect(()=>{
-    axios.get('http://localhost:3001/persons')
+    // axios.get('http://localhost:3001/persons')
+    //   .then((res)=>{
+    //     setPersons(res.data)
+    //   })
+    phoneNumberService
+      .getAllNumbers()
       .then((res)=>{
-        setPersons(res.data)
-      })
+          setPersons(res)
+        }
+      )
   }, [])
 
+
+  // HANDLER FUNCTIONS
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
+
   const handleNumberChange = (e) => {
     setNewNumber(e.target.value)
   }
+
   const handlerFilterNameChange = (e) => {
     const filteredValue = e.target.value;
     if(filteredValue!==''){
@@ -46,20 +56,31 @@ const App = () => {
     if(a) alert(`person with name ${newName} already exists`)
     else {
       const phoneNumber = {name: newName, number: newNumber}
-      const promise = phoneNumberService.addNumber(phoneNumber)
-      promise.then(e=>setPersons(persons.concat(e)))
+      phoneNumberService.addNumber(phoneNumber).then(e=>setPersons(persons.concat(e)))
     }
   }
 
+  const handleDeleteClick = (id) => {
+    
+    window.confirm('delete?') ? 
+      phoneNumberService.deleteNumber(id)
+        .then(()=>{
+          phoneNumberService.getAllNumbers().then((res)=>setPersons(res))
+        }
+      )
+    :
+    console.log('no delete');
+  }
 
 
+  // React elements
   return (
     <div>
       <h2>Phonebook</h2>
       
       <FormAddPeople handleNewNameAdd={handleNewNameAdd} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
 
-      <NumbersList persons={persons}/>
+      <NumbersList persons={persons} handleDeleteClick={handleDeleteClick}/>
 
       <Filter filteredPersons={filteredPersons} handlerFilterNameChange={handlerFilterNameChange}/>      
       <div>debug: {newName} {newNumber}</div>
