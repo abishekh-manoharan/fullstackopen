@@ -12,10 +12,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState()
 
   useEffect(()=>{
-    // axios.get('http://localhost:3001/persons')
-    //   .then((res)=>{
-    //     setPersons(res.data)
-    //   })
     phoneNumberService
       .getAllNumbers()
       .then((res)=>{
@@ -53,7 +49,26 @@ const App = () => {
       return e.name === newName
     })
 
-    if(a) alert(`person with name ${newName} already exists`)
+    if(a) { 
+      const confirm = window.confirm(`person with name ${newName} already exists. Update the number?`)
+      if (confirm) {
+        const updatedUser = {...a, number: newNumber}
+        phoneNumberService
+          .updateExistingUser(a.id, updatedUser)
+          .then((user)=>{
+            const updatedPersons = persons.map((person)=>{
+              if(person.id === user.id) {
+                return updatedUser
+              }
+              else{
+                return person
+              }
+            })
+
+            setPersons(updatedPersons)
+          })
+      }
+    }
     else {
       const phoneNumber = {name: newName, number: newNumber}
       phoneNumberService.addNumber(phoneNumber).then(e=>setPersons(persons.concat(e)))
@@ -61,7 +76,6 @@ const App = () => {
   }
 
   const handleDeleteClick = (id) => {
-    
     window.confirm('delete?') ? 
       phoneNumberService.deleteNumber(id)
         .then(()=>{
