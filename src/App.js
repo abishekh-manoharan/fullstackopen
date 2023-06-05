@@ -4,12 +4,14 @@ import Filter from './components/Filter'
 import FormAddPeople from './components/FormAddPeople'
 import NumbersList from './components/NumbersList'
 import phoneNumberService from './services/phoneNumber'
+import Status from './components/Status'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filteredPersons, setFilteredPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState()
+  const [status, setStatus] = useState('')
 
   useEffect(()=>{
     phoneNumberService
@@ -67,11 +69,20 @@ const App = () => {
 
             setPersons(updatedPersons)
           })
+          .catch(()=>{
+            setStatus('couldn\'t update.')
+            setTimeout(()=>{setStatus(null)}, 2000)
+          })
       }
     }
     else {
       const phoneNumber = {name: newName, number: newNumber}
       phoneNumberService.addNumber(phoneNumber).then(e=>setPersons(persons.concat(e)))
+      setStatus(`${newName} has been added.`)
+      setTimeout(()=>{
+        setStatus('')
+      }, 3000)
+
     }
   }
 
@@ -90,8 +101,8 @@ const App = () => {
   // React elements
   return (
     <div>
+      <Status status={status}/>
       <h2>Phonebook</h2>
-      
       <FormAddPeople handleNewNameAdd={handleNewNameAdd} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
 
       <NumbersList persons={persons} handleDeleteClick={handleDeleteClick}/>

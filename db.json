@@ -21,12 +21,6 @@
       "id": 4
     },
     {
-      "name": "Abi",
-      "number": "321",
-      "id": 5,
-      "phoneNumber": "321"
-    },
-    {
       "name": "Hashi ",
       "number": "321",
       "id": 6
@@ -35,6 +29,16 @@
       "name": "Mano",
       "number": "567",
       "id": 7
+    },
+    {
+      "name": "Rachel",
+      "number": "321",
+      "id": 9
+    },
+    {
+      "name": "Abi",
+      "number": "123",
+      "id": 10
     }
   ]
 }
