@@ -12,14 +12,18 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [countriesToShow, setCountriesToShow] = useState([])
   const [content, setContent] = useState();
+  const [weather, setWeather] = useState(0);
 
   useEffect(()=>{
+    console.log(process.env.REACT_APP_OPENWEATHER_API_KEY);
     countriesService.getAll()
       .then(res=>{
         console.log(res);
         setCountries(res)
       })
   },[])
+
+  console.log(countriesService.getWeather('London').then(res=>console.log(res)));
 
   const handleInputChange = (e) => {
     const input = e.target.value;
@@ -31,6 +35,7 @@ const App = () => {
       setContent('Too many countries to show')
     }  
     else if(UpdatedCountriesToShow.length === 1) {
+      countriesService.getWeather(UpdatedCountriesToShow[0].capital).then(weather=>
       setContent(<>
         <div>
           {UpdatedCountriesToShow[0].name.common}
@@ -41,7 +46,11 @@ const App = () => {
         <div>
           {UpdatedCountriesToShow[0].flag}
         </div>
+        <div>
+          TEMPERATURE OF CAPITAL: {weather.current.temp_c ? weather.current.temp_c : null} Celsius
+        </div>
       </>)
+      )
     }
     else {
       setContent(
