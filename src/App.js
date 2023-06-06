@@ -8,8 +8,65 @@ import countriesService from './services/countries'
 import Status from './components/Status'
 
 const App = () => {
-  countriesService.getAll()
-    .then(res=>{console.log(res)})
+  const [countries, setCountries] = useState([])
+  const [countriesToShow, setCountriesToShow] = useState([])
+  const [content, setContent] = useState();
+
+  useEffect(()=>{
+    countriesService.getAll()
+      .then(res=>{
+        console.log(res);
+        setCountries(res)
+      })
+  },[])
+
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+
+    const UpdatedCountriesToShow = countries.filter((country)=>
+      country.name.common.includes(input))
+      
+    if(UpdatedCountriesToShow.length > 10) {
+      setContent('Too many countries to show')
+    }  
+    else if(UpdatedCountriesToShow.length === 1) {
+      setContent(<>
+        <div>
+          {UpdatedCountriesToShow[0].name.common}
+        </div>
+        <div>
+          {UpdatedCountriesToShow[0].name.official}
+        </div>
+        <div>
+          {UpdatedCountriesToShow[0].flag}
+        </div>
+      </>)
+    }
+    else {
+      setContent(
+        UpdatedCountriesToShow.map((e)=>{
+          return <div>{e.name.common}</div>}
+        ))
+    }
+  }
+
+  
+
+  return (
+    <>
+      <input onChange={handleInputChange}/>
+      {/* {countriesToShow.length > 10 ? 
+        <div>Too many countries match the query</div>
+        :
+        countriesToShow.map((e)=>{
+          return <div>{e.name.common}</div>
+        }) */}
+      <div>
+        {content}  
+      </div>
+      
+    </>
+  );
 }
 
 export default App

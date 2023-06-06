@@ -7,6 +7,4 @@ const getAll = () => {
         .then(res=>res.data)
 }
 
-export default {
-    getAll: getAll
-}
+export default { getAll }
