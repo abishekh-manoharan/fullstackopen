@@ -5,6 +5,7 @@ import FormAddPeople from './components/FormAddPeople'
 import NumbersList from './components/NumbersList'
 import phoneNumberService from './services/phoneNumber'
 import countriesService from './services/countries'
+import Country from './components/Country'
 import Status from './components/Status'
 
 const App = () => {
@@ -45,7 +46,8 @@ const App = () => {
     else {
       setContent(
         UpdatedCountriesToShow.map((e)=>{
-          return <div>{e.name.common}</div>}
+          return <Country country={e}/>
+        }
         ))
     }
   }
