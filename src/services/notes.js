@@ -1,8 +1,11 @@
 import axios from 'axios'
 
-const URL = 'http://localhost:3001/notes'
+const URL = '/api/notes'
 
-const getAll = () => axios.get(URL).then((res)=>res.data)
+const getAll = () => axios.get(URL).then((res)=>{
+    console.log('res.data : '+res);
+    return res.data
+})
 
 const create = (newNote) => axios.post(URL, newNote).then((res)=>res.data)
 

@@ -13,6 +13,7 @@ const App = (props) => {
     NoteService
       .getAll()
       .then((res)=>{
+        console.log('res'+res);
         setNotes(res)
       })
   }, [])
