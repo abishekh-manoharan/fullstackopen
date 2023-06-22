@@ -75,13 +75,17 @@ const App = () => {
           })
       }
     }
+
     else {
       const phoneNumber = {name: newName, number: newNumber}
-      phoneNumberService.addNumber(phoneNumber).then(e=>setPersons(persons.concat(e)))
-      setStatus(`${newName} has been added.`)
-      setTimeout(()=>{
-        setStatus('')
-      }, 3000)
+      phoneNumberService.addNumber(phoneNumber).then(e=>{
+        console.log(e);
+        setPersons(persons.concat(e))
+      })
+      // setStatus(`${newName} has been added.`)
+      // setTimeout(()=>{
+      //   setStatus('')
+      // }, 3000)
 
     }
   }
@@ -89,8 +93,9 @@ const App = () => {
   const handleDeleteClick = (id) => {
     window.confirm('delete?') ? 
       phoneNumberService.deleteNumber(id)
-        .then(()=>{
-          phoneNumberService.getAllNumbers().then((res)=>setPersons(res))
+        .then((res)=>{
+          console.log('returned from delete:'+res);
+          setPersons(res)
         }
       )
     :
