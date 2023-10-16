@@ -2,7 +2,7 @@ import React from 'react';
 
 function Status(props) {
     return (
-        <div>
+        <div className='status'>
             {props.status}
         </div>
     );

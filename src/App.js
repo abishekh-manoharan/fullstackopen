@@ -13,12 +13,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState()
   const [status, setStatus] = useState('')
 
-  useEffect(()=>{
+  useEffect(() => {
     phoneNumberService
       .getAllNumbers()
-      .then((res)=>{
-          setPersons(res)
-        }
+      .then((res) => {
+        setPersons(res)
+      }
       )
   }, [])
 
@@ -34,8 +34,8 @@ const App = () => {
 
   const handlerFilterNameChange = (e) => {
     const filteredValue = e.target.value;
-    if(filteredValue!==''){
-      const filtered = persons.filter((el)=> {
+    if (filteredValue !== '') {
+      const filtered = persons.filter((el) => {
         return el.name.toLowerCase().includes(e.target.value.toLowerCase())
       })
       setFilteredPersons(filtered)
@@ -47,72 +47,78 @@ const App = () => {
 
   const handleNewNameAdd = (e) => {
     e.preventDefault();
-    const a = persons.find((e)=>{
+    const a = persons.find((e) => {
       return e.name === newName
     })
 
-    if(a) { 
+    if (a) {
       const confirm = window.confirm(`person with name ${newName} already exists. Update the number?`)
       if (confirm) {
-        const updatedUser = {...a, number: newNumber}
+        const updatedUser = { ...a, number: newNumber }
         phoneNumberService
           .updateExistingUser(a.id, updatedUser)
-          .then((user)=>{
-            const updatedPersons = persons.map((person)=>{
-              if(person.id === user.id) {
-                return updatedUser
-              }
-              else{
-                return person
-              }
-            })
+          .then((user) => {
+            if (user._message) { // case of error
+              setStatus('error: ' + e.message)
+              setTimeout(() => { setStatus(null) }, 2000)
+            } else { // case of success
+              const updatedPersons = persons.map((person) => {
+                if (person.id === user.id) {
+                  return updatedUser
+                }
+                else {
+                  return person
+                }
+              })
 
-            setPersons(updatedPersons)
+              setPersons(updatedPersons)
+            }
           })
-          .catch(()=>{
+          .catch(() => {
             setStatus('couldn\'t update.')
-            setTimeout(()=>{setStatus(null)}, 2000)
+            setTimeout(() => { setStatus(null) }, 2000)
           })
       }
     }
 
     else {
-      const phoneNumber = {name: newName, number: newNumber}
-      phoneNumberService.addNumber(phoneNumber).then(e=>{
-        console.log(e);
-        setPersons(persons.concat(e))
+      const phoneNumber = { name: newName, number: newNumber }
+      phoneNumberService.addNumber(phoneNumber).then(e => {
+        if (e._message) { // case of error
+          setStatus('error: ' + e.message)
+          setTimeout(() => { setStatus(null) }, 2000)
+        } else { // case of success
+          console.log('add number service returned value: ');
+          console.log(e);
+          setPersons(persons.concat(e))
+        }
       })
-      // setStatus(`${newName} has been added.`)
-      // setTimeout(()=>{
-      //   setStatus('')
-      // }, 3000)
-
     }
   }
 
   const handleDeleteClick = (id) => {
-    window.confirm('delete?') ? 
+    window.confirm('delete?') ?
       phoneNumberService.deleteNumber(id)
-        .then((res)=>{
-          console.log('returned from delete:'+res);
+        .then((res) => {
+          console.log('returned from delete:' + res);
           setPersons(res)
         }
-      )
-    :
-    console.log('no delete');
+        )
+      :
+      console.log('no delete');
   }
 
 
   // React elements
   return (
     <div>
-      <Status status={status}/>
-      <h2>Phonebook</h2>
-      <FormAddPeople handleNewNameAdd={handleNewNameAdd} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
+      <Status status={status} />
+      <h2>Phonebook App</h2>
+      <FormAddPeople handleNewNameAdd={handleNewNameAdd} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
 
-      <NumbersList persons={persons} handleDeleteClick={handleDeleteClick}/>
+      <NumbersList persons={persons} handleDeleteClick={handleDeleteClick} />
 
-      <Filter filteredPersons={filteredPersons} handlerFilterNameChange={handlerFilterNameChange}/>      
+      <Filter filteredPersons={filteredPersons} handlerFilterNameChange={handlerFilterNameChange} />
       <div>debug: {newName} {newNumber}</div>
     </div>
 

@@ -1,11 +1,11 @@
 import React from 'react';
 
-function FormAddPeople({handleNewNameAdd,
-    handleNameChange,
-    handleNumberChange}) {
-    return (
-        <div>
-            <form onSubmit={handleNewNameAdd}>
+function FormAddPeople({ handleNewNameAdd,
+  handleNameChange,
+  handleNumberChange }) {
+  return (
+    <div>
+      <form onSubmit={handleNewNameAdd}>
         <div>
           name: <input onChange={handleNameChange} />
           number: <input onChange={handleNumberChange} />
@@ -14,8 +14,8 @@ function FormAddPeople({handleNewNameAdd,
           <button type="submit">add</button>
         </div>
       </form>
-        </div>
-    );
+    </div>
+  );
 }
 
 export default FormAddPeople;
